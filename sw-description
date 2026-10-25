@@ -1,0 +1,65 @@
+software =
+{
+	version = "1.0.1";
+	hardware-compatibility: [ "encrypt" ];
+	description = "Quasar firmware update";
+
+	images: (
+		{
+			name = "rootfs";
+			filename = "rootfs.ubifs";
+			sha256 = "2d193a70d263699f745b94c4e129d941a95d1b36103bbfd4ee60f41b71bce2d0";
+			volume = "rootfs";
+		},
+
+		{
+			name = "boot";
+			filename = "boot.img.encrypt";
+			sha256 = "02a5c682dd7cebdc87db0ded56f5cd8ba8f27ece243367e40f58bd011a8471d3";
+			device = "/dev/mtd2";
+			type = "flash";
+		},
+
+		{
+			name = "dtb";
+			filename = "dt.img.encrypt";
+			sha256 = "cd10ca7af3f8ee0dce7f4d7168780c842d20d78b8db1f8eed42246ed99f15058";
+			device = "/dev/dtb";
+		}
+	);
+
+	files: (
+		{
+			name = "bootloader";
+			filename = "u-boot.bin.encrypt.usb.bl2";
+			sha256 = "6b8cfce8cf4019ebde56cfcf6107317f31d56ac8ce7b9a50a1f65e926b4f9e29";
+			path = "/tmp/u-boot.bin.encrypt.usb.bl2";
+		},
+
+		{
+			name = "tpl";
+			filename = "u-boot.bin.encrypt.usb.tpl";
+			sha256 = "fe15c5ad9a9cd9e1971890767b25ff82c1764eadb357d9e4a57a3959e62e313b";
+			path = "/tmp/u-boot.bin.encrypt.usb.tpl";
+		}
+	);
+
+	scripts: (
+		{
+			name = "tpl";
+			filename = "flash-nand-copies.sh";
+			sha256 = "d82ef6f4388caa06a1052114871c9e424384cb81a0826ab23190d1113471f96a";
+			data = "/tmp/u-boot.bin.encrypt.usb.tpl /dev/mtd1 1M 0";
+			type = "shellscript";
+		},
+
+		{
+			name = "bootloader";
+			filename = "flash-nand-copies.sh";
+			sha256 = "d82ef6f4388caa06a1052114871c9e424384cb81a0826ab23190d1113471f96a";
+			data = "/tmp/u-boot.bin.encrypt.usb.bl2 /dev/mtd0 0x40000 0x80000 0xc0000 0x100000 0x140000 0x180000 0x1c0000 0";
+			type = "shellscript";
+		},
+	);
+}
+
